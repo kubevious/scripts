@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 MY_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/$(basename "${BASH_SOURCE[0]}")"
 MY_DIR="$(dirname $MY_PATH)"
 
@@ -88,12 +88,12 @@ parse_input()
   STAGE_NAME="Parsing Input"
   start_stage
 
-  echo "Raw Input Length: ${#YAML_STREAM}"
+  echo "Input Length: ${#YAML_STREAM}"
 
-  FORMATTED_YAML_STREAM=$(echo -e "${YAML_STREAM}" | yq -o yaml --no-colors)
+  FORMATTED_YAML_STREAM=$(echo ${YAML_STREAM} | yq -o yaml --no-colors)
   RESULT=$?
 
-  echo "Formatted Length: ${#FORMATTED_YAML_STREAM}"
+  # echo "Formatted Length: ${#FORMATTED_YAML_STREAM}"
 
   # echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
   # echo ${FORMATTED_YAML_STREAM}
@@ -105,27 +105,28 @@ parse_input()
   finish_stage
 }
 
+
 build_package() 
 {
   STAGE_NAME="Building Package"
   start_stage
 
-  YAML_DATA=$(echo -e "${FORMATTED_YAML_STREAM}" | gzip | base64)
+  YAML_DATA=$(echo ${FORMATTED_YAML_STREAM} | gzip | base64)
 
   NAMESPACE="default"
 
   CHANGE_PACKAGE_NAME="change-$(generate_uuid)"
   CHANGE_PACKAGE_NAME=$(echo "${CHANGE_PACKAGE_NAME}" | tr "[:upper:]" "[:lower:]")
 
-  MANIFEST=""
-  MANIFEST+="apiVersion: kubevious.io/v1\n"
-  MANIFEST+="kind: ChangePackage\n"
-  MANIFEST+="metadata:\n"
-  MANIFEST+="  name: ${CHANGE_PACKAGE_NAME}\n"
-  MANIFEST+="  namespace: ${NAMESPACE}\n"
-  MANIFEST+="data:\n"
-  MANIFEST+="  changes:\n"
-  MANIFEST+="    - data: ${YAML_DATA}\n"
+  MANIFEST=()
+  MANIFEST+=("apiVersion: kubevious.io/v1")
+  MANIFEST+=("kind: ChangePackage")
+  MANIFEST+=("metadata:")
+  MANIFEST+=("  name: ${CHANGE_PACKAGE_NAME}")
+  MANIFEST+=("  namespace: ${NAMESPACE}")
+  MANIFEST+=("data:")
+  MANIFEST+=("  changes:")
+  MANIFEST+=("    - data: ${YAML_DATA}")
 
   finish_stage
 }
@@ -135,7 +136,11 @@ apply_package()
   STAGE_NAME="Apply Package"
   start_stage
 
-  echo -e "${MANIFEST}" | kubectl apply -f -
+  # echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+  # printf "%s\n" "${MANIFEST[@]}"
+  # echo "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
+
+  printf "%s\n" "${MANIFEST[@]}" | kubectl apply -f -
   RESULT=$?
   if [ $RESULT -ne 0 ]; then
     handle_error "Could not apply change request. Make sure you have write access to kubevious.io/v1 ChangePackage"
@@ -178,7 +183,7 @@ wait_validation()
     else
       echo "⏳     State: pending..."
     fi
-    # sleep 5
+    sleep 1
   done
 
   # echo "VALIDATION_STATE_DATA: ${VALIDATION_STATE_DATA}"
