@@ -1,1 +1,1 @@
-# scripts
+# Kubevious CLI Scripts
