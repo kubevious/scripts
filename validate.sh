@@ -88,11 +88,16 @@ parse_input()
   STAGE_NAME="Parsing Input"
   start_stage
 
+  echo "Raw Input Length: ${#YAML_STREAM}"
+
   FORMATTED_YAML_STREAM=$(echo ${YAML_STREAM} | yq -o yaml --no-colors)
   RESULT=$?
-  echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-  echo ${FORMATTED_YAML_STREAM}
-  echo "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
+
+  echo "Formatted Length: ${#FORMATTED_YAML_STREAM}"
+
+  # echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+  # echo ${FORMATTED_YAML_STREAM}
+  # echo "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
   if [ $RESULT -ne 0 ]; then
     handle_error "Malformed YAML streamed"
   fi
