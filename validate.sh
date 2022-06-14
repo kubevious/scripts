@@ -90,7 +90,7 @@ parse_input()
 
   echo "Raw Input Length: ${#YAML_STREAM}"
 
-  FORMATTED_YAML_STREAM=$(echo ${YAML_STREAM} | yq -o yaml --no-colors)
+  FORMATTED_YAML_STREAM=$(echo -e "${YAML_STREAM}" | yq -o yaml --no-colors)
   RESULT=$?
 
   echo "Formatted Length: ${#FORMATTED_YAML_STREAM}"
@@ -110,7 +110,7 @@ build_package()
   STAGE_NAME="Building Package"
   start_stage
 
-  YAML_DATA=$(echo "${FORMATTED_YAML_STREAM}" | gzip | base64)
+  YAML_DATA=$(echo -e "${FORMATTED_YAML_STREAM}" | gzip | base64)
 
   NAMESPACE="default"
 
