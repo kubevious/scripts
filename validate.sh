@@ -269,7 +269,6 @@ handle_validation_result()
 
 
   VALIDATION_SUCCESS=$(echo ${VALIDATION_STATE_DATA} | yq '.status.success')
-  VALIDATION_SUCCESS="true"
   if [[ ${VALIDATION_SUCCESS} == "true" ]]; then
     echo "✅"
     echo "✅ Change validation passed successfully."
