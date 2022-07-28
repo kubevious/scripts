@@ -124,7 +124,7 @@ build_package()
   MANIFEST+=("  namespace: ${NAMESPACE}")
   MANIFEST+=("data:")
   MANIFEST+=("  changes:")
-  MANIFEST+=("    - data: ${YAML_DATA}")
+  MANIFEST+=("    - data: \"${YAML_DATA}\"")
 
   finish_stage
 }
