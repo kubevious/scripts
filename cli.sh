@@ -85,13 +85,6 @@ elif [ -d "${OUTPUT_FILE}" ]; then
   exit 1
 fi
 
-opsys=windows
-if [[ "$OSTYPE" == linux* ]]; then
-  opsys=linuxstatic
-elif [[ "$OSTYPE" == darwin* ]]; then
-  opsys=macos
-fi
-
 # Supported values of 'arch': x64, arm64
 case $(uname -m) in
 x86_64)
@@ -104,6 +97,15 @@ arm64|aarch64)
     arch=x64
     ;;
 esac
+
+opsys=windows
+if [[ "$OSTYPE" == linux* ]]; then
+  opsys=linuxstatic
+elif [[ "$OSTYPE" == darwin* ]]; then
+  opsys=macos
+  arch=x64
+fi
+
 
 echo "ℹ️  Release URL: ${LATEST_RELEASE_URL}"
 
