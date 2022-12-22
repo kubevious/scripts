@@ -3,11 +3,11 @@
 
 # If no argument is given -> Downloads the most recently released version of the
 # Kubevious CLI binary to /usr/local/bin.
-# (e.g. 'install_kubevious.sh')
+# (e.g. 'curl https://get.kubevious.io/cli.sh | bash')
 #
 # If one arguments is given -> Downloads the most recently released version of the
 # Kubevious CLI binary to the specified directory.
-# (e.g. 'install_kubevious.sh /usr/local/bin')
+# (e.g. 'curl https://get.kubevious.io/cli.sh | bash /dev/stdin /usr/local/bin')
 #
 # Fails if the file already exists.
 
@@ -128,6 +128,7 @@ echo "    Destination: ${OUTPUT_FILE}"
 curl -L "$ASSET_URL" -o ${OUTPUT_FILE}
 chmod +x ${OUTPUT_FILE}
 
-kubevious --help
+${OUTPUT_FILE} --help
 
-echo "Kubevious installed to ${OUTPUT_FILE}"
+echo "Kubevious installed to ${OUTPUT_FILE}."
+echo "Consider adding ${WHERE} to PATH variable."
