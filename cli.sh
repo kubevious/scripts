@@ -11,6 +11,8 @@
 #
 # Fails if the file already exists.
 
+echo "🌟 Welcome to Kubevious CLI installer script"
+
 set -e
 
 # Unset CDPATH to restore default cd behavior. An exported CDPATH can
@@ -24,7 +26,7 @@ if [ -n "$1" ]; then
 fi
 
 if ! test -d "$WHERE"; then
-  echo "$WHERE does not exist. Create it first."
+  echo "🛑 $WHERE does not exist. Create it first."
   exit 1
 fi
 
@@ -71,15 +73,15 @@ function find_release_asset_url() {
 
 WHERE="$(readlink_f "${WHERE}")"
 
-echo "Installing to: ${WHERE}"
+echo "ℹ️ Installing to: ${WHERE}"
 
 OUTPUT_FILE="${WHERE}/kubevious";
 
 if [ -f "${OUTPUT_FILE}" ]; then
-  echo "${OUTPUT_FILE} exists. Remove it first."
+  echo "🛑 ${OUTPUT_FILE} exists. Remove it first."
   exit 1
 elif [ -d "${OUTPUT_FILE}" ]; then
-  echo "${OUTPUT_FILE} exists and is a directory. Remove it first."
+  echo "🛑 ${OUTPUT_FILE} exists and is a directory. Remove it first."
   exit 1
 fi
 
@@ -111,24 +113,25 @@ RELEASE_INFO=$(curl -s "$LATEST_RELEASE_URL")
 # echo "arch: ${arch}"
 
 if [[ $RELEASE_INFO == *"API rate limit exceeded"* ]]; then
-  echo "Github rate-limiter failed the request. Either authenticate or wait a couple of minutes."
+  echo "🛑 GitHub rate-limiter failed the request. Either authenticate or wait a couple of minutes."
   exit 1
 fi
 
 ASSET_URL="$(find_release_asset_url "$RELEASE_INFO" "$opsys" "$arch")"
 
 if [[ -z "$ASSET_URL" ]]; then
-  echo "ERROR: Could not find release asset for ${opsys}/${arch}."
+  echo "🛑 ERROR: Could not find release asset for ${opsys}/${arch}."
   exit 1
 fi
 
-echo "Downloading asset..."
-echo "    Asset URL: ${ASSET_URL}"
-echo "    Destination: ${OUTPUT_FILE}"
+echo "📥 Downloading asset..."
+echo "     Asset URL: ${ASSET_URL}"
+echo "     Destination: ${OUTPUT_FILE}"
 curl -L "$ASSET_URL" -o ${OUTPUT_FILE}
 chmod +x ${OUTPUT_FILE}
 
 ${OUTPUT_FILE} --help
 
-echo "Kubevious installed to ${OUTPUT_FILE}."
-echo "Consider adding ${WHERE} to PATH variable."
+echo ""
+echo "✅ Kubevious installed to ${OUTPUT_FILE}."
+echo "👉 Consider adding ${WHERE} to PATH variable."
