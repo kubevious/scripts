@@ -2,12 +2,12 @@
 # SPDX-License-Identifier: Apache-2.0
 
 # If no argument is given -> Downloads the most recently released version of the
-# Kubevious CLI binary to your current working directory.
+# Kubevious CLI binary to /usr/local/bin.
 # (e.g. 'install_kubevious.sh')
 #
 # If one arguments is given -> Downloads the most recently released version of the
 # Kubevious CLI binary to the specified directory.
-# (e.g. 'install_kubevious.sh  /usr/bin')
+# (e.g. 'install_kubevious.sh /usr/local/bin')
 #
 # Fails if the file already exists.
 
@@ -17,7 +17,7 @@ set -e
 # cause cd to output the current directory to STDOUT.
 unset CDPATH
 
-WHERE=/usr/bin
+WHERE=/usr/local/bin
 
 if [ -n "$1" ]; then
   WHERE="$1"
