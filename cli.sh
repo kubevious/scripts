@@ -89,7 +89,7 @@ opsys=windows
 if [[ "$OSTYPE" == linux* ]]; then
   opsys=linuxstatic
 elif [[ "$OSTYPE" == darwin* ]]; then
-  opsys=darwin
+  opsys=macos
 fi
 
 # Supported values of 'arch': x64, arm64
