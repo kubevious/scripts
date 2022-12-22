@@ -73,7 +73,7 @@ function find_release_asset_url() {
 
 WHERE="$(readlink_f "${WHERE}")"
 
-echo "ℹ️ Installing to: ${WHERE}"
+echo "ℹ️  Installing to: ${WHERE}"
 
 OUTPUT_FILE="${WHERE}/kubevious";
 
@@ -105,7 +105,7 @@ arm64|aarch64)
     ;;
 esac
 
-echo "Release URL: ${LATEST_RELEASE_URL}"
+echo "ℹ️  Release URL: ${LATEST_RELEASE_URL}"
 
 RELEASE_INFO=$(curl -s "$LATEST_RELEASE_URL")
 # echo "releases: ${releases}"
